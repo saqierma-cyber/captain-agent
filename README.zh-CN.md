@@ -19,6 +19,7 @@
 </div>
 
 ---
+<img width="2200" height="1440" alt="image" src="https://github.com/user-attachments/assets/b328b37d-f534-44ce-9847-b0a7516dfb3a" />
 
 > ## 智能体的时代已经到来，它的队长也已就位。
 >
