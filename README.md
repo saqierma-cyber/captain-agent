@@ -19,6 +19,7 @@
 </div>
 
 ---
+<img width="2200" height="1440" alt="image" src="https://github.com/user-attachments/assets/588eb229-c047-4930-9725-657fec05bfe1" />
 
 > ## The age of autonomous agents has arrived. So has its captain.
 >
