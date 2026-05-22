@@ -1,0 +1,68 @@
+# Network rules — initial placeholder set. Real threat-intel feed
+# integration comes in Slice 4/5 (URLhaus / abuse.ch).
+
+rules:
+  - id: known-bad-domains-stub
+    type: network
+    severity: high
+    domains:
+      # Placeholder examples; real list comes from threat-intel feeds.
+      - "evil.com"
+      - "malicious-c2.test"
+    message: "连接已知恶意域名（占位规则集，真实 feed 待集成）"
+
+  - id: pastebin-domain
+    type: network
+    severity: medium
+    domains:
+      - "pastebin.com"
+      - "paste.ee"
+      - "hastebin.com"
+      - "gist.githubusercontent.com"
+    message: "访问 paste / gist 服务（常用于 exfil 短文本 / 拉脚本）"
+
+  - id: tor-onion
+    type: network
+    severity: high
+    domains:
+      - ".onion"
+    message: "访问 Tor onion 域"
+
+  - id: dns-over-https-public
+    type: network
+    severity: low
+    domains:
+      - "dns.google"
+      - "cloudflare-dns.com"
+      - "doh."
+    message: "使用 DNS-over-HTTPS 公共解析（可能绕过本地 DNS 监控)"
+
+  - id: file-share-services
+    type: network
+    severity: medium
+    domains:
+      - "transfer.sh"
+      - "0x0.st"
+      - "ufile.io"
+      - "anonfiles.com"
+      - "filebin.net"
+    message: "访问匿名文件托管服务（exfil 常用)"
+
+  - id: dynamic-dns-services
+    type: network
+    severity: medium
+    domains:
+      - ".duckdns.org"
+      - ".no-ip.org"
+      - ".ddns.net"
+    message: "解析动态 DNS 域名（C2 常用)"
+
+  - id: tunneling-services
+    type: network
+    severity: medium
+    domains:
+      - "ngrok.io"
+      - ".loca.lt"
+      - ".trycloudflare.com"
+      - "localtunnel.me"
+    message: "使用 tunneling 服务（暴露本地端口到外网)"

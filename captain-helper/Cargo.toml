@@ -1,0 +1,23 @@
+[package]
+name = "captain-helper"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+description = "Root-mode daemon that runs osqueryd with Endpoint Security and forwards events to the Captain Agent UI over a Unix domain socket."
+
+[[bin]]
+name = "captain-helper"
+path = "src/main.rs"
+
+[dependencies]
+captain-common = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+# For listing alive PIDs (answers IPC ClientMessage::ListAlivePids — used
+# by Tauri TargetManager to GC monitored set when processes exit).
+sysinfo = "0.30"

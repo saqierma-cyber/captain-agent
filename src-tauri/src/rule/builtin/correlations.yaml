@@ -1,0 +1,32 @@
+# Correlation rules — time-window patterns. Each fires only when ALL
+# require_all_rules have fired within window_seconds. Engine resets the
+# correlation's internal state after firing so it can detect the same
+# pattern again in a future window.
+
+rules:
+  - id: credential-exfil-suspect
+    type: correlation
+    severity: critical
+    window_seconds: 30
+    require_all_rules:
+      - ssh-private-key-read
+      - curl-post-data
+    message: "凭据读取后 30 秒内执行 curl POST — 疑似数据外泄链路"
+
+  - id: download-and-launchagent-injection
+    type: correlation
+    severity: critical
+    window_seconds: 60
+    require_all_rules:
+      - mac-user-launchagent-write
+      - launchctl-load-unfamiliar
+    message: "60 秒内写入 LaunchAgent 后立刻 launchctl load —— 持久化注入完整链"
+
+  - id: download-pipe-then-cred-read
+    type: correlation
+    severity: critical
+    window_seconds: 60
+    require_all_rules:
+      - download-and-exec-pipe
+      - ssh-private-key-read
+    message: "60 秒内 curl | sh 后读凭据 —— 下载执行+凭据探测组合"

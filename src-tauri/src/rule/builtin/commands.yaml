@@ -1,0 +1,99 @@
+# Dangerous-command rules — patterns Agent might use to exfiltrate or
+# self-modify. Regex against full cmdline.
+
+rules:
+  - id: curl-post-data
+    type: process
+    severity: medium
+    cmd_pattern: 'curl\b.*-X\s+POST.*-d\b'
+    message: "curl POST 带数据体（可能外发数据）"
+
+  - id: curl-upload-file
+    type: process
+    severity: high
+    cmd_pattern: 'curl\b.*(-T|--upload-file|-F\s+.*@/)'
+    message: "curl 直接上传本地文件"
+
+  - id: download-and-exec-pipe
+    type: process
+    severity: critical
+    cmd_pattern: '(curl|wget).*\|\s*(sh|bash|zsh|python)'
+    message: "下载后直接管道执行（典型恶意 oneliner）"
+
+  - id: eval-curl-output
+    type: process
+    severity: critical
+    cmd_pattern: 'eval\s+["`$(]*(curl|wget)'
+    message: "eval 执行 curl/wget 的输出"
+
+  - id: reverse-shell-bash
+    type: process
+    severity: critical
+    cmd_pattern: '(bash|sh)\s+-i.*(/dev/tcp/|/dev/udp/)'
+    message: "Bash 反弹 shell 特征"
+
+  - id: nc-listen
+    type: process
+    severity: high
+    cmd_pattern: '\bnc\b.*-l\b.*-p'
+    message: "netcat 监听模式（可能是反弹 shell 接收端）"
+
+  - id: chmod-777
+    type: process
+    severity: medium
+    cmd_pattern: '\bchmod\s+(-R\s+)?(0?7|0?6)77\b'
+    message: "chmod 设置过于宽松权限（777/677）"
+
+  - id: rm-rf-root
+    type: process
+    severity: critical
+    cmd_pattern: '\brm\s+-[rR]f?\s+/(\s|$)'
+    message: "rm -rf 根目录"
+
+  - id: rm-rf-home
+    type: process
+    severity: high
+    cmd_pattern: '\brm\s+-[rR]f?\s+(\$HOME|~|/Users/[^/]+)(/|\s|$)'
+    message: "rm -rf 用户主目录"
+
+  - id: launchctl-load-unfamiliar
+    type: process
+    severity: high
+    cmd_pattern: 'launchctl\s+(load|bootstrap)\s+'
+    message: "调用 launchctl 加载新服务"
+
+  - id: tar-exfil-pattern
+    type: process
+    severity: medium
+    cmd_pattern: 'tar\b.*(czvf|cjvf|cf)\s+-.*\s+(~|/Users/|/etc|/var)'
+    message: "tar 打包敏感目录到 stdout（典型 exfil 准备）"
+
+  - id: ssh-keygen-extract
+    type: process
+    severity: high
+    cmd_pattern: '\bssh-keygen\b.*-e\b'
+    message: "ssh-keygen -e 提取私钥（可能用于格式转换+exfil）"
+
+  - id: base64-decode-pipe-exec
+    type: process
+    severity: critical
+    cmd_pattern: '\bbase64\s+(-d|--decode).*\|\s*(sh|bash|zsh|python|perl|ruby)'
+    message: "base64 解码后管道执行（混淆攻击载荷）"
+
+  - id: osascript-applescript
+    type: process
+    severity: medium
+    cmd_pattern: '\bosascript\b.*-e\s+[\x22\x27]'
+    message: "osascript 执行内联 AppleScript（可能控制其他 app）"
+
+  - id: defaults-write-suspicious
+    type: process
+    severity: medium
+    cmd_pattern: '\bdefaults\s+write\s+.*(LSUIElement|RunAtLoad|NSAppleScriptEnabled)'
+    message: "defaults write 修改可疑系统偏好（隐藏/自启动相关）"
+
+  - id: dscl-add-user
+    type: process
+    severity: critical
+    cmd_pattern: '\bdscl\b.*-create\b.*/Users/'
+    message: "dscl 创建用户账号（持久化后门）"

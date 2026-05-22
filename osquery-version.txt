@@ -1,0 +1,5 @@
+# osqueryd version pinned for this captain-agent release.
+# When upgrading: bump this, run the full integration test suite,
+# watch https://github.com/osquery/osquery/security/advisories for relevant CVEs.
+
+5.23.0

@@ -1,0 +1,10 @@
+[package]
+name = "captain-common"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+description = "Shared types and IPC protocol between captain-agent UI and captain-helper daemon."
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }

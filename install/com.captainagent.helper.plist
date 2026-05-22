@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.captainagent.helper</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/local/libexec/captain-helper</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>KeepAlive</key>
+  <dict>
+    <key>SuccessfulExit</key>
+    <false/>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/var/log/captain-helper.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/var/log/captain-helper.err</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>CAPTAIN_OSQUERYD</key>
+    <string>/Library/Application Support/com.captainagent.helper/osquery.app/Contents/MacOS/osqueryd</string>
+    <key>CAPTAIN_HELPER_STATE</key>
+    <string>/var/lib/captain-helper</string>
+    <key>CAPTAIN_HELPER_SOCK</key>
+    <string>/var/run/captain-helper.sock</string>
+    <key>RUST_LOG</key>
+    <string>captain_helper=info,osqueryd=info,osqueryd_stdout=info</string>
+  </dict>
+
+  <key>ProcessType</key>
+  <string>Background</string>
+
+  <key>SoftResourceLimits</key>
+  <dict>
+    <key>NumberOfFiles</key>
+    <integer>4096</integer>
+  </dict>
+</dict>
+</plist>

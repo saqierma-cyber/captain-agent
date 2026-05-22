@@ -1,0 +1,37 @@
+# Persistence-mechanism rules — anything writing to autostart locations.
+
+rules:
+  - id: mac-user-launchagent-write
+    type: file
+    severity: high
+    pattern: "~/Library/LaunchAgents/*"
+    action: write
+    message: "写入 macOS 用户级 LaunchAgent（开机自启动）"
+
+  - id: mac-system-launchagent-write
+    type: file
+    severity: critical
+    pattern: "/Library/LaunchAgents/*"
+    action: write
+    message: "写入 macOS 系统级 LaunchAgent"
+
+  - id: mac-launchdaemon-write
+    type: file
+    severity: critical
+    pattern: "/Library/LaunchDaemons/*"
+    action: write
+    message: "写入 macOS LaunchDaemon（root 级开机自启）"
+
+  - id: mac-cron-write
+    type: file
+    severity: high
+    pattern: "/var/at/tabs/*"
+    action: write
+    message: "写入 cron 计划任务（at/cron）"
+
+  - id: mac-login-items-write
+    type: file
+    severity: medium
+    pattern: "~/Library/Application Support/com.apple.backgroundtaskmanagementagent/*"
+    action: write
+    message: "修改 macOS 登录项 / 后台任务"

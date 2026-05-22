@@ -1,0 +1,37 @@
+# Metric rules — sliding-window rate-based detections.
+# Fires when the count of matching events over `window_seconds` reaches
+# `threshold`. Designed for "agent went haywire" detection: bursts of
+# spawns/connects/queries that wouldn't trip any single-event rule.
+
+rules:
+  - id: process-spawn-burst
+    type: metric
+    severity: medium
+    metric: process_spawn_per_window
+    window_seconds: 60
+    threshold: 200
+    message: "进程 spawn 速率异常（60s 内 ≥ 200 次） — 可能是脚本/Agent 失控"
+
+  - id: net-connect-burst
+    type: metric
+    severity: high
+    metric: net_connect_per_window
+    window_seconds: 60
+    threshold: 50
+    message: "出站连接速率异常（60s 内 ≥ 50 次） — 可能扫描或数据外发"
+
+  - id: dns-query-burst
+    type: metric
+    severity: medium
+    metric: dns_query_per_window
+    window_seconds: 60
+    threshold: 100
+    message: "DNS 查询速率异常（60s 内 ≥ 100 次） — 可能 C2 beacon"
+
+  - id: file-write-burst
+    type: metric
+    severity: medium
+    metric: file_write_per_window
+    window_seconds: 60
+    threshold: 100
+    message: "敏感路径写入速率异常（60s 内 ≥ 100 次）"
